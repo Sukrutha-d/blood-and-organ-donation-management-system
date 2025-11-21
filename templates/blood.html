@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>Blood Units</h3>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form action="{{ url_for('add_blood') }}" method="post" class="row g-2">
+      <div class="col-md-2"><input class="form-control" name="group" placeholder="Group (e.g. O+)"></div>
+      <div class="col-md-2"><input class="form-control" name="donation_date" placeholder="Donation YYYY-MM-DD"></div>
+      <div class="col-md-2"><input class="form-control" name="expiry_date" placeholder="Expiry YYYY-MM-DD"></div>
+      <div class="col-md-2"><input class="form-control" name="donor_id" placeholder="Donor ID"></div>
+      <div class="col-md-2"><input class="form-control" name="hospital_id" placeholder="Hospital ID"></div>
+      <div class="col-md-2"><button class="btn btn-success" type="submit">Add Blood</button></div>
+    </form>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead><tr><th>ID</th><th>Group</th><th>Donation</th><th>Expiry</th><th>Status</th><th>Donor</th><th>Hospital</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for u in units %}
+    <tr>
+      <td>{{ u.BloodUnit_ID }}</td>
+      <td>{{ u.Blood_Group }}</td>
+      <td>{{ u.Donation_Date }}</td>
+      <td>{{ u.Expiry_Date }}</td>
+      <td>
+        {% if u.Status == 'Expired' %}
+          <span class="badge bg-danger">Expired</span>
+        {% elif u.Status == 'Used' %}
+          <span class="badge bg-secondary">Used</span>
+        {% else %}
+          <span class="badge bg-success">Available</span>
+        {% endif %}
+      </td>
+      <td>{{ u.Donor_ID }}</td>
+      <td>{{ u.Hospital_ID }}</td>
+      <td>
+        <a class="btn btn-sm btn-primary" href="{{ url_for('edit_blood', id=u.BloodUnit_ID) }}">Edit</a>
+        <form action="{{ url_for('delete_blood', id=u.BloodUnit_ID) }}" method="post" style="display:inline" onsubmit="return confirm('Delete blood unit?');">
+          <button class="btn btn-sm btn-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

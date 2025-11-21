@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Recipients</h2>
+
+  <form action="{{ url_for('add_recipient') }}" method="POST" class="row g-2 mt-3">
+    <div class="col-md-3"><input name="name" class="form-control" placeholder="Name" required></div>
+    <div class="col-md-2"><input type="date" name="dob" class="form-control" required></div>
+    <div class="col-md-2">
+      <select name="gender" class="form-select" required>
+        <option value="">Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="col-md-2"><input name="blood_group" class="form-control" placeholder="Blood Group"></div>
+    <div class="col-md-3"><input name="email" class="form-control" placeholder="Email"></div>
+
+    <!-- new contact number field -->
+    <div class="col-md-3 mt-2"><input name="contact" class="form-control" placeholder="Contact No (optional)"></div>
+    <div class="col-md-3 mt-2"><input name="street" class="form-control" placeholder="Street"></div>
+    <div class="col-md-3 mt-2"><input name="city" class="form-control" placeholder="City"></div>
+    <div class="col-md-3 mt-2"><input name="state" class="form-control" placeholder="State"></div>
+    <div class="col-md-2 mt-2"><button type="submit" class="btn btn-primary w-100">Add Recipient</button></div>
+  </form>
+
+  <hr>
+
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>ID</th><th>Name</th><th>DOB</th><th>Gender</th>
+        <th>Blood Group</th><th>Email</th><th>City</th><th>Contacts</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in recipients %}
+      <tr>
+        <td>{{ r.Recipient_ID }}</td>
+        <td>{{ r.Recipient_Name }}</td>
+        <td>{{ r.DOB }}</td>
+        <td>{{ r.Gender }}</td>
+        <td>{{ r.Blood_Group }}</td>
+        <td>{{ r.Email }}</td>
+        <td>{{ r.City }}</td>
+
+        <!-- Contacts column -->
+        <td>
+          {% if r.contacts %}
+            {% for c in r.contacts.split(',') %}
+              <div>{{ c.strip() }}</div>
+            {% endfor %}
+          {% else %}
+            <span class="text-muted">—</span>
+          {% endif %}
+        </td>
+
+        <td>
+          <a href="{{ url_for('edit_recipient', id=r.Recipient_ID) }}" class="btn btn-sm btn-primary">Edit</a>
+          <a href="{{ url_for('recipient_contacts', id=r.Recipient_ID) }}" class="btn btn-sm btn-info">Contacts</a>
+          <form action="{{ url_for('delete_recipient', id=r.Recipient_ID) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete recipient?');">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>Edit Donor #{{ donor.Donor_ID }}</h3>
+<form method="post">
+  <div class="mb-2"><label>Name</label><input class="form-control" name="name" value="{{ donor.Donor_Name }}"></div>
+  <div class="mb-2"><label>DOB</label><input class="form-control" name="dob" value="{{ donor.DOB }}"></div>
+  <div class="mb-2"><label>Gender</label><input class="form-control" name="gender" value="{{ donor.Gender }}"></div>
+  <div class="mb-2"><label>Blood Group</label><input class="form-control" name="blood_group" value="{{ donor.Blood_Group }}"></div>
+  <div class="mb-2"><label>Email</label><input class="form-control" name="email" value="{{ donor.Email }}"></div>
+  <div class="mb-2"><label>Street</label><input class="form-control" name="street" value="{{ donor.Street }}"></div>
+  <div class="mb-2"><label>City</label><input class="form-control" name="city" value="{{ donor.City }}"></div>
+  <div class="mb-2"><label>State</label><input class="form-control" name="state" value="{{ donor.State }}"></div>
+  <button class="btn btn-primary" type="submit">Save</button>
+  <a class="btn btn-secondary" href="{{ url_for('donors') }}">Cancel</a>
+</form>
+{% endblock %}

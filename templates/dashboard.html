@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="text-center">
+  <h2 class="text-danger my-4">Dashboard</h2>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body text-center">
+        <h5>Total Donors</h5>
+        <h3>{{ donors }}</h3>
+      </div>
+    </div>
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body text-center">
+        <h5>Recipients</h5>
+        <h3>{{ recipients }}</h3>
+      </div>
+    </div>
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body text-center">
+        <h5>Available Blood Units</h5>
+        <h3>{{ blood_available }}</h3>
+      </div>
+    </div>
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body text-center">
+        <h5>Available Organs</h5>
+        <h3>{{ organ_available }}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <h5>Recent Transplants</h5>
+  <table class="table table-striped">
+    <thead><tr><th>ID</th><th>Type</th><th>Date</th><th>Recipient</th><th>Doctor</th><th>Hospital</th><th>BloodUnit</th><th>Organ</th></tr></thead>
+    <tbody>
+      {% for t in recent_transplants %}
+      <tr>
+        <td>{{ t.Transplant_ID }}</td>
+        <td>{{ t.Type }}</td>
+        <td>{{ t.Transplant_Date }}</td>
+        <td>{{ t.Recipient_ID }}</td>
+        <td>{{ t.Doctor_ID }}</td>
+        <td>{{ t.Hospital_ID }}</td>
+        <td>{{ t.BloodUnit_ID }}</td>
+        <td>{{ t.Organ_ID }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

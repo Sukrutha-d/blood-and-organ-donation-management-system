@@ -1,0 +1,75 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>Donors</h3>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form action="{{ url_for('add_donor') }}" method="post" class="row g-2">
+      <div class="col-md-3"><input class="form-control" name="name" placeholder="Name" required></div>
+      <div class="col-md-2"><input type="date" class="form-control" name="dob" placeholder="YYYY-MM-DD"></div>
+      <div class="col-md-2">
+        <select class="form-select" name="gender">
+          <option value="">Gender</option>
+          <option>Male</option><option>Female</option><option>Other</option>
+        </select>
+      </div>
+      <div class="col-md-2"><input class="form-control" name="blood_group" placeholder="Blood Group"></div>
+      <div class="col-md-3"><input class="form-control" name="email" placeholder="Email"></div>
+
+      <!-- New contact field -->
+      <div class="col-md-3 mt-2"><input class="form-control" name="contact" placeholder="Contact No (optional)"></div>
+      <div class="col-md-3 mt-2"><input class="form-control" name="street" placeholder="Street"></div>
+      <div class="col-md-3 mt-2"><input class="form-control" name="city" placeholder="City"></div>
+      <div class="col-md-3 mt-2"><input class="form-control" name="state" placeholder="State"></div>
+
+      <div class="col-12 mt-2">
+        <div class="d-flex gap-2">
+          <button class="btn btn-success" type="submit">Add Donor</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>ID</th><th>Name</th><th>DOB</th><th>Age</th><th>Gender</th><th>Blood</th>
+      <th>Email</th><th>Contacts</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for d in donors %}
+    <tr>
+      <td>{{ d.Donor_ID }}</td>
+      <td>{{ d.Donor_Name }}</td>
+      <td>{{ d.DOB }}</td>
+      <td>{{ d.Age }}</td>
+      <td>{{ d.Gender }}</td>
+      <td>{{ d.Blood_Group }}</td>
+      <td>{{ d.Email or '-' }}</td>
+
+      <!-- new contacts column -->
+      <td>
+        {% if d.contacts %}
+          {% for c in d.contacts.split(',') %}
+            <div>{{ c.strip() }}</div>
+          {% endfor %}
+        {% else %}
+          <span class="text-muted">—</span>
+        {% endif %}
+      </td>
+
+      <!-- updated actions -->
+      <td>
+        <a class="btn btn-sm btn-primary" href="{{ url_for('edit_donor', id=d.Donor_ID) }}">Edit</a>
+        <a class="btn btn-sm btn-info" href="{{ url_for('donor_contacts', id=d.Donor_ID) }}">Contacts</a>
+        <form action="{{ url_for('delete_donor', id=d.Donor_ID) }}" method="post" style="display:inline" onsubmit="return confirm('Delete donor?');">
+          <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

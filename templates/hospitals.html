@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Hospitals</h2>
+
+  <form action="{{ url_for('add_hospital') }}" method="POST" class="row g-2 mt-3">
+    <div class="col-md-3"><input name="name" class="form-control" placeholder="Hospital Name" required></div>
+    <div class="col-md-3"><input name="street" class="form-control" placeholder="Street" required></div>
+    <div class="col-md-3"><input name="city" class="form-control" placeholder="City" required></div>
+    <div class="col-md-2"><input name="state" class="form-control" placeholder="State" required></div>
+
+    <!-- Optional contact number input -->
+    <div class="col-md-3 mt-2">
+      <input name="contact" class="form-control" placeholder="Contact No (optional)">
+    </div>
+
+    <div class="col-md-2 mt-2">
+      <button type="submit" class="btn btn-primary w-100">Add Hospital</button>
+    </div>
+  </form>
+
+  <hr>
+
+  <table class="table table-bordered table-hover mt-3 align-middle">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Street</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Contacts</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if hospitals %}
+        {% for h in hospitals %}
+        <tr>
+          <td>{{ h.Hospital_ID }}</td>
+          <td>{{ h.Hospital_Name }}</td>
+          <td>{{ h.Street }}</td>
+          <td>{{ h.City }}</td>
+          <td>{{ h.State }}</td>
+
+          <!-- Contacts column -->
+          <td>
+            {% if h.contacts %}
+              {% for c in h.contacts.split(',') %}
+                <div>{{ c.strip() }}</div>
+              {% endfor %}
+            {% else %}
+              <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+
+          <td>
+            <a href="{{ url_for('edit_hospital', id=h.Hospital_ID) }}" class="btn btn-sm btn-primary">Edit</a>
+            <a href="{{ url_for('hospital_contacts', id=h.Hospital_ID) }}" class="btn btn-sm btn-info">Contacts</a>
+            <form action="{{ url_for('delete_hospital', id=h.Hospital_ID) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete hospital?');">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="7" class="text-center text-muted">No hospitals found.</td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

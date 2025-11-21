@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>Manage Contacts for Donor: {{ donor.Donor_Name }} (ID: {{ donor.Donor_ID }})</h3>
+
+<div class="card my-3">
+  <div class="card-body">
+    <form action="{{ url_for('donor_contacts_add') }}" method="post" class="row g-2 align-items-end">
+      <input type="hidden" name="donor_id" value="{{ donor.Donor_ID }}">
+      <div class="col-md-4"><input class="form-control" name="contact" placeholder="Contact number (e.g., 9876543210)" required></div>
+      <div class="col-md-2"><button class="btn btn-success" type="submit">Add Contact</button></div>
+      <div class="col-md-6"><a class="btn btn-secondary" href="{{ url_for('donors') }}">Back to donors</a></div>
+    </form>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead><tr><th>Contact</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for c in contacts %}
+    <tr>
+      <td>{{ c.Contact_no }}</td>
+      <td>
+        <form action="{{ url_for('donor_contacts_delete') }}" method="post" style="display:inline" onsubmit="return confirm('Delete contact?');">
+          <input type="hidden" name="donor_id" value="{{ donor.Donor_ID }}">
+          <input type="hidden" name="contact" value="{{ c.Contact_no }}">
+          <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+    {% if contacts|length == 0 %}
+    <tr><td colspan="2" class="text-muted">No contacts found.</td></tr>
+    {% endif %}
+  </tbody>
+</table>
+{% endblock %}
